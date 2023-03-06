@@ -21,6 +21,10 @@ let maxPowerFlag = false
 
 let cursors
 
+function parabola(value) {
+  return (value + 0) * (value + 0) + (value / 2.5) * power
+}
+
 //////////////
 class SceneA extends Phaser.Scene {
   constructor() {
@@ -133,6 +137,21 @@ class SceneA extends Phaser.Scene {
       hitBallStatus = false
       ballIsRunning = false
     }
+
+    //calculate dots parabola
+    dots.children.iterate(function (child, index) {
+      //remove first dot
+      if (!hitBallStatus) {
+        if (index === 0) {
+          child.enableBody(true)
+        } else {
+          child.setX(0 + ball.x + (index * power) / 6)
+          child.setY(0 + ball.y + parabola((index * -power) / 20) / 30)
+        }
+      } else {
+        child.enableBody(true)
+      }
+    })
 
     //handle hit ball
     if (pointer.isDown && !maxPowerFlag) {
