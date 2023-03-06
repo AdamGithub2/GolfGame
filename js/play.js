@@ -6,7 +6,6 @@ var stick
 var flag
 
 var power = 0
-var position
 var hitBallStatus = false
 
 var dots
@@ -71,8 +70,6 @@ class SceneA extends Phaser.Scene {
 
   create() {
     this.input.mouse.disableContextMenu()
-
-    position = this.add.text(10, 10, '', { fill: '#00ff00' }).setDepth(1)
 
     this.add.image(400, 300, 'sky')
 
@@ -168,15 +165,5 @@ class SceneA extends Phaser.Scene {
         this.shot()
       }
     }
-
-    //debug informations
-    position.setText([
-      'x: ' + Number(pointer.worldX),
-      'y: ' + Number(pointer.worldY),
-      'isDown: ' + pointer.isDown,
-      'power: ' + power,
-      'Ball y' + ball.y,
-      'Ball x' + ball.x,
-    ])
   }
 }
