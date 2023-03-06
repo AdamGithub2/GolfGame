@@ -136,6 +136,7 @@ class SceneA extends Phaser.Scene {
     if (power <= 0 && ballIsRunning) {
       hitBallStatus = false
       ballIsRunning = false
+      this.scene.start('SceneB')
     }
 
     //calculate dots parabola
