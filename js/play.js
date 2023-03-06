@@ -6,7 +6,6 @@ var stick
 var flag
 
 var power = 0
-var position
 var hitBallStatus = false
 
 var dots
@@ -20,6 +19,10 @@ let ballIsRunning = false
 let maxPowerFlag = false
 
 let cursors
+
+function parabola(value) {
+  return (value + 0) * (value + 0) + (value / 2.5) * power
+}
 
 //////////////
 class SceneA extends Phaser.Scene {
@@ -67,8 +70,6 @@ class SceneA extends Phaser.Scene {
 
   create() {
     this.input.mouse.disableContextMenu()
-
-    position = this.add.text(10, 10, '', { fill: '#00ff00' }).setDepth(1)
 
     this.add.image(400, 300, 'sky')
 
@@ -132,7 +133,23 @@ class SceneA extends Phaser.Scene {
     if (power <= 0 && ballIsRunning) {
       hitBallStatus = false
       ballIsRunning = false
+      this.scene.start('SceneB')
     }
+
+    //calculate dots parabola
+    dots.children.iterate(function (child, index) {
+      //remove first dot
+      if (!hitBallStatus) {
+        if (index === 0) {
+          child.enableBody(true)
+        } else {
+          child.setX(0 + ball.x + (index * power) / 6)
+          child.setY(0 + ball.y + parabola((index * -power) / 20) / 30)
+        }
+      } else {
+        child.enableBody(true)
+      }
+    })
 
     //handle hit ball
     if (pointer.isDown && !maxPowerFlag) {
@@ -148,15 +165,5 @@ class SceneA extends Phaser.Scene {
         this.shot()
       }
     }
-
-    //debug informations
-    position.setText([
-      'x: ' + Number(pointer.worldX),
-      'y: ' + Number(pointer.worldY),
-      'isDown: ' + pointer.isDown,
-      'power: ' + power,
-      'Ball y' + ball.y,
-      'Ball x' + ball.x,
-    ])
   }
 }
